@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>CLIENT EXAMPLE</h1>
+        <div>
+            <ol id="dataList">
+
+            </ol>
+        </div>
+        <script>
+            let socket = new WebSocket("ws://127.0.0.1:9001");
+
+            socket.onopen = function(e) {
+                alert("[open] buka bang");
+                alert("Coba bilang");
+                socket.send("Ujang mantap");
+            }
+
+            socket.onmessage = function(event) {
+                // alert(`[message] Terima: ${event.data}`);
+                console.log(`[message] ${event.data}`);
+                let dataList = document.getElementById('dataList');
+                let newData = document.createElement('li');
+                newData.appendChild(document.createTextNode(event.data));
+                dataList.appendChild(newData);
+            }
+
+            socket.onclose  = function(event) {
+                if(event.wasClean) {
+                    alert(`[close] CLEAN CLOSE: code=${event.code} reason=${event.reason}`)
+                } else  {
+                    alert(`[close] BAD CLOSE: code=${event.code} reason=${event.reason}`)
+                }
+            }
+
+            socket.onerror = function(error) {
+                alert(`[errpr] ERROR! ${error.message}`);
+                console.log(error);
+            }
+        </script>
+    </body>
+</html>
